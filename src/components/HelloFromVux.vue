@@ -1,22 +1,43 @@
 <template>
   <div>
     <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
-      <h1> </h1>
+      <group >
+        <x-input title="手机号码：" name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+      </group>
+
+
+      <group>
+        <x-input title="密码：" type="text" placeholder="" v-model="password" :min="6" :max="6"></x-input>
+      </group>
+      <flexbox>
+        <flexbox-item><x-input title="验证码："></x-input></flexbox-item>
+        <flexbox-item> <x-button mini>获取验证码</x-button> </flexbox-item>
+      </flexbox>
+      <group>
+      <button-tab>
+        <button-tab-item selected>注册</button-tab-item>
+        <button-tab-item>登录</button-tab-item>
+      </button-tab>
+      </group>
     </div>
-    <group title="cell demo">
-      <cell title="VUX" value="cool" is-link></cell>
-    </group>
+    <tabbar>
+      <tabbar-item>
+        <span slot="label">用户中心</span>
+      </tabbar-item>
+      <tabbar-item>
+        <span slot="label">计算中心</span>
+      </tabbar-item>
+    </tabbar>
   </div>
 </template>
 
 <script>
-import { Group, Cell } from 'vux'
+import { Group, Cell,XButton } from 'vux'
 
 export default {
   components: {
     Group,
-    Cell
+    Cell,XButton
   },
   data () {
     return {
@@ -24,7 +45,9 @@ export default {
       // with hot-reload because the reloaded component
       // preserves its current state and we are modifying
       // its initial state.
-      msg: 'Hello World!'
+      msg: 'Hello World!',
+      register:'注册',
+      login:'登录'
     }
   }
 }
