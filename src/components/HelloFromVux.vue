@@ -1,34 +1,26 @@
 <template>
   <div>
-    <div class="vux-demo">
+      <div>
+        <group>
+          <cell
+            :title="billTitle"
+            is-link
+            :border-intent="false"
+            :arrow-direction="showContent001 ? 'up' : 'down'"
+            @click.native="showContent001 = !showContent001"></cell>
 
-      <flexbox>
-        <flexbox-item><div class="flex-demo">手机号：</div></flexbox-item>
-        <flexbox-item><div class="flex-demo">
-          <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
-        </div></flexbox-item>
-      </flexbox>
-      <group >
+          <template v-if="showContent001">
+            <cell-box :border-intent="false" class="sub-item" is-link>已完成</cell-box>
+            <cell-box class="sub-item" is-link>未完成</cell-box>
+          </template>
 
-      </group>
+          <cell :title="accountMoney" @click.native="onClick" :is-loading="!money" :value="money"></cell>
+          <cell :title="consumerHistory" value="" is-link></cell>
+        </group>
+      </div>
 
-
-      <group>
-        <x-input title="密码：" type="text" placeholder="" v-model="password" :min="6" :max="6"></x-input>
-      </group>
-      <flexbox>
-        <flexbox-item><x-input title="验证码："></x-input></flexbox-item>
-        <flexbox-item> <x-button mini>获取验证码</x-button> </flexbox-item>
-      </flexbox>
-      <group>
-      <button-tab>
-        <button-tab-item selected>注册</button-tab-item>
-        <button-tab-item>登录</button-tab-item>
-      </button-tab>
-      </group>
-    </div>
     <tabbar>
-      <tabbar-item>
+      <tabbar-item >
         <span slot="label">用户中心</span>
       </tabbar-item>
       <tabbar-item>
@@ -39,22 +31,29 @@
 </template>
 
 <script>
-import { Group, Cell,XButton } from 'vux'
+import { Group, Cell,CellBox,XButton,Badge } from 'vux'
 
 export default {
   components: {
     Group,
-    Cell,XButton
+    Cell,
+    CellBox,
+    XButton
   },
+  methods: {
+  onClick () {
+    console.log('on click')
+  }
+  },//end methods
   data () {
     return {
-      // note: changing this line won't causes changes
-      // with hot-reload because the reloaded component
-      // preserves its current state and we are modifying
-      // its initial state.
-      msg: 'Hello World!',
       register:'注册',
-      login:'登录'
+      login:'登录',
+      showContent001: false,
+      billTitle:'账单',
+      accountMoney :'账户余额',
+      money:120,
+      consumerHistory:'消费历史'
     }
   }
 }
@@ -67,5 +66,8 @@ export default {
 .logo {
   width: 100px;
   height: 100px
+}
+.sub-item {
+  color: #888;
 }
 </style>

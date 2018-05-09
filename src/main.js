@@ -7,7 +7,7 @@ import App from './App'
 import Home from './components/HelloFromVux'
 import Register from './components/Register'
 
-import { Tabbar,ButtonTab, ButtonTabItem,TabbarItem,Icon,XInput,Flexbox,FlexboxItem} from 'vux'
+import { Tabbar,ButtonTab, ButtonTabItem,TabbarItem,Icon,XInput,Flexbox,FlexboxItem,XButton} from 'vux'
 
 Vue.use(VueRouter)
 Vue.component('x-input', XInput)
@@ -18,11 +18,18 @@ Vue.component('button-tab', ButtonTab)
 Vue.component('button-tab-item', ButtonTabItem)
 Vue.component('flexbox', Flexbox)
 Vue.component('flexbox-item', FlexboxItem)
+Vue.component('x-button', XButton)
 
-const routes = [{
+const routes = [
+  {
   path: '/',
   component: Register
-}]
+  },
+  {
+    path:'/home',
+    component:Home
+  }
+]
 
 const router = new VueRouter({
   routes
