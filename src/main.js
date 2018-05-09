@@ -5,6 +5,7 @@ import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
 import Home from './components/HelloFromVux'
+import Register from './components/Register'
 
 import { Tabbar,ButtonTab, ButtonTabItem,TabbarItem,Icon,XInput,Flexbox,FlexboxItem} from 'vux'
 
@@ -20,7 +21,7 @@ Vue.component('flexbox-item', FlexboxItem)
 
 const routes = [{
   path: '/',
-  component: Home
+  component: Register
 }]
 
 const router = new VueRouter({

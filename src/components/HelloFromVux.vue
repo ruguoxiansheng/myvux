@@ -1,8 +1,15 @@
 <template>
   <div>
     <div class="vux-demo">
+
+      <flexbox>
+        <flexbox-item><div class="flex-demo">手机号：</div></flexbox-item>
+        <flexbox-item><div class="flex-demo">
+          <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+        </div></flexbox-item>
+      </flexbox>
       <group >
-        <x-input title="手机号码：" name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile"></x-input>
+
       </group>
 
 
