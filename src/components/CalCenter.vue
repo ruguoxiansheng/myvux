@@ -10,9 +10,11 @@
         </group>
 
         <group>
-        <picker title="项目编号：" :data='years001' v-model='year001' @on-change='change'></picker>
+          <selector ref="defaultValueRef" title="项目编号：" direction="rtl" :options="list" v-model="defaultValue"></selector>
         </group>
-        <br>
+        <div style="padding:15px;">
+          <x-button type="primary" @click.native="getValue('defaultValueRef')">get full value</x-button>
+        </div>
 
       </div>
       <div id="secondStep">
@@ -23,7 +25,7 @@
 </template>
 
 <script>
-  import { Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem,Calendar, Badge,Group, Picker} from 'vux'
+  import { Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem,Calendar, Badge,Group,Selector} from 'vux'
     export default {
       components: {
         Tab,
@@ -36,18 +38,24 @@
         Calendar,
         Badge,
         Group,
-        Picker
+        Selector
       },
       data() {
         return {
           demo3: 'TODAY',
-          years001: ['a','b','c','d'],
-          year001: ['a'],
+          list: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
+          defaultValue: 'gd'
         }
       },
       methods: {
         onItemClick (index) {
           console.log('on item click:', index)
+        },
+        getValue (ref) {
+          this.$vux.alert.show({
+            title: 'getFullValue',
+            content: this.$refs[ref].getFullValue()
+          })
         }
       }
     }
