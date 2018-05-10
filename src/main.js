@@ -6,6 +6,8 @@ import VueRouter from 'vue-router'
 import App from './App'
 import Home from './components/HelloFromVux'
 import Register from './components/Register'
+import UserCenter from './components/UserCenter'
+import CalCenter from './components/CalCenter'
 
 import { Tabbar,ButtonTab, ButtonTabItem,TabbarItem,Icon,XInput,Flexbox,FlexboxItem,XButton} from 'vux'
 
@@ -27,7 +29,17 @@ const routes = [
   },
   {
     path:'/home',
-    component:Home
+    component:Home,
+    children:[
+      {
+        path:"/userCenter",
+        component:UserCenter
+      },
+      {
+        path:"/calCenter",
+        component:CalCenter
+      }
+    ]
   }
 ]
 
