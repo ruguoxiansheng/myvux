@@ -1,7 +1,6 @@
 <template>
   <div>
-    <x-header left-options.showBack>This is the page title.</x-header>
-    <br>
+    <x-header left-options.showBack :title="headTitle"></x-header>
     <div>
     <router-view></router-view>
     </div>
@@ -30,13 +29,18 @@ export default {
   },
   methods: {
     toUserCenter()  {
-      this.$router.push("/userCenter")
+      this.$router.push("/userCenter");
+      this.headTitle="用户中心"
     },
     toCalCenter()  {
-      this.$router.push("/calCenter")
+      this.$router.push("/calCenter");
+      this.headTitle="计算中心"
     }
   },//end methods
   data () {
+    return {
+      headTitle :"用户中心"
+    }
   },
   watch: {
     '$route': function (newV) {

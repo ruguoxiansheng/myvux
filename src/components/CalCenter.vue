@@ -9,20 +9,37 @@
           <calendar @on-change="onChange" v-model="demo3" title="开标时间：" disable-future></calendar>
         </group>
 
-        <group>
+        <group >
           <selector ref="defaultValueRef" title="项目编号：" direction="rtl" :options="list" v-model="defaultValue"></selector>
         </group>
-        <div style="padding:15px;">
-          <x-button type="primary" @click.native="getValue('defaultValueRef')">get full value</x-button>
-        </div>
 
-        <group v-for="(value, key) in items" >
-          <x-input :title="key" :value="value" ></x-input>
+        <group v-for="(value, key) in items"  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">
+         <x-input :title="key" :value="value" ></x-input>
         </group>
 
       </div>
       <div id="secondStep"  v-show="secondStepShow">
-       aaaa
+        <group>
+          <x-input title="公司名称：" name="companyName" v-model="companyName"></x-input>
+        </group>
+
+        <group >
+          <x-input title="公司报价：" name="companyValue" v-model="companyValue"></x-input>
+        </group>
+
+        <group >
+          <selector ref="defaultValueRef" title="单位：" direction="rtl" :options="unit" v-model="defaultUnitValue"></selector>
+        </group>
+        <br>
+
+        <flexbox>
+          <flexbox-item><div class="flex-demo"> <x-button mini type="primary" @click.native="confirm">确认报价</x-button></div></flexbox-item>
+          <flexbox-item><div class="flex-demo"> <x-button mini type="primary" @click.native="query">查询输入</x-button></div></flexbox-item>
+          <flexbox-item><div class="flex-demo"><x-button mini type="warn" @click.native="calculate">计算标底</x-button></div></flexbox-item>
+        </flexbox>
+
+
+
       </div>
     </div>
 
@@ -55,23 +72,52 @@
              z: 0
          },
           firstStepShow:true,
-          secondStepShow:false
+          secondStepShow:false,
+          companyName:'',
+          companyValue:'',
+          unit: [
+            {
+              key: 'yuan',
+              value: '元'
+            },
+            {
+              key: 'wyuan',
+              value: '万元'
+            },
+            {
+              key: 'qwyuan',
+              value: '千万元'
+            }
+          ],
+          defaultUnitValue:'wyuan',
+          inputObj :{}
         }
       },
       methods: {
         firstStepClick () {
-            firstStepShow=true;
-            secondStepShow:false
+          if (!this.firstStepShow) {
+            this.firstStepShow=true;
+            this.secondStepShow=false
+          }
+
         },
         secondStepClick () {
-          firstStepShow=false;
-          secondStepShow:true
+          if (!this.secondStepShow) {
+            this.firstStepShow = false;
+            this.secondStepShow = true
+          }
         },
         getValue (ref) {
           this.$vux.alert.show({
             title: 'getFullValue',
             content: this.$refs[ref].getFullValue()
           })
+        },
+        confirm() {
+          this.inputObj[this.companyName] = this.companyValue;
+          this.companyValue='';
+          this.companyName='';
+          this.$Message.success('输入成功，请继续.....');
         }
       }
     }
@@ -79,9 +125,12 @@
 
 <style lang="less" scoped>
   @import '~vux/src/styles/1px.less';
-  @import '~vux/src/styles/center.less';
-  .selected-days {
-    color: #999;
-    width: 90px;
+
+  .flex-demo {
+    text-align: center;
+    color: #fff;
+    background-color: #fffffb;
+    border-radius: 4px;
+    background-clip: padding-box;
   }
 </style>
