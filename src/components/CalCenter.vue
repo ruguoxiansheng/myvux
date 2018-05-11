@@ -1,10 +1,10 @@
 <template>
     <div>
         <tab>
-          <tab-item selected @on-item-click="onItemClick">第一步</tab-item>
-          <tab-item @on-item-click="onItemClick">第二步</tab-item>
+          <tab-item selected @on-item-click="firstStepClick">第一步</tab-item>
+          <tab-item @on-item-click="secondStepClick">第二步</tab-item>
         </tab>
-      <div id="firstStep">
+      <div id="firstStep"  v-show="firstStepShow">
         <group>
           <calendar @on-change="onChange" v-model="demo3" title="开标时间：" disable-future></calendar>
         </group>
@@ -16,9 +16,13 @@
           <x-button type="primary" @click.native="getValue('defaultValueRef')">get full value</x-button>
         </div>
 
-      </div>
-      <div id="secondStep">
+        <group v-for="(value, key) in items" >
+          <x-input :title="key" :value="value" ></x-input>
+        </group>
 
+      </div>
+      <div id="secondStep"  v-show="secondStepShow">
+       aaaa
       </div>
     </div>
 
@@ -44,12 +48,24 @@
         return {
           demo3: 'TODAY',
           list: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
-          defaultValue: 'gd'
+          defaultValue: 'gd',
+         items: {
+           x: 0,
+             y: 0,
+             z: 0
+         },
+          firstStepShow:true,
+          secondStepShow:false
         }
       },
       methods: {
-        onItemClick (index) {
-          console.log('on item click:', index)
+        firstStepClick () {
+            firstStepShow=true;
+            secondStepShow:false
+        },
+        secondStepClick () {
+          firstStepShow=false;
+          secondStepShow:true
         },
         getValue (ref) {
           this.$vux.alert.show({
