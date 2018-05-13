@@ -34,23 +34,9 @@
 
         <flexbox>
           <flexbox-item><div class="flex-demo"> <x-button mini type="primary" @click.native="confirm" >确认报价</x-button></div></flexbox-item>
-          <flexbox-item><div class="flex-demo"> <x-button mini type="primary" @click.native="queryInput" >查询输入</x-button></div></flexbox-item>
+          <flexbox-item><div class="flex-demo"> <x-button mini type="primary" @click.native="query">查询输入</x-button></div></flexbox-item>
           <flexbox-item><div class="flex-demo"><x-button mini type="warn" @click.native="calculate">计算标底</x-button></div></flexbox-item>
         </flexbox>
-
-
-          <div v-transfer-dom>
-            <x-dialog v-model="show" class="dialog-demo">
-              <div class="img-box" style="overflow: auto;">
-                <group v-for="(value, key) in inputObj"  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">
-                  <x-input :title="key" :value="value" ></x-input>
-                </group>
-              </div>
-              <div @click="show=false">
-                <span class="vux-close"></span>
-              </div>
-            </x-dialog>
-          </div>
 
       </div>
     </div>
@@ -60,7 +46,7 @@
 <script>
   import {
     Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem,Calendar, Badge,Group,Selector,
-    Confirm ,TransferDomDirective as TransferDom,XDialog
+    Confirm ,TransferDomDirective as TransferDom
   } from 'vux'
 
     export default {
@@ -79,8 +65,7 @@
         Badge,
         Group,
         Selector,
-        Confirm,
-        XDialog
+        Confirm
       },
       data() {
         return {
@@ -88,7 +73,7 @@
           list: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
           defaultValue: 'gd',
           items: {
-             x: 0,
+           x: 0,
              y: 0,
              z: 0
           },
@@ -112,22 +97,7 @@
           ],
           defaultUnitValue:'wyuan',
           // 存储到后台的数据对象
-          inputObj :{},
-          columns : [
-            {
-              title: '序号',
-              key: 'orderNumber'
-            },
-            {
-              title:'公司名称',
-              key:'companyName'
-            },
-            {
-              title: '公司报价',
-              key: 'companyValue'
-            }
-          ],
-          show:false
+          inputObj :{}
         }
       },
       methods: {
@@ -151,10 +121,16 @@
           })
         },
         confirm() {
-          const _this = this;
           this.$vux.confirm.show({
-            title: '注意',
-            content: '请确认输入值，一但录入将不能更改！',
+            title: 'Title',
+            content: ' <div>\n' +
+            '        <group>\n' +
+            '          <x-input title="公司名称：" name="companyName" v-model="this.companyName"></x-input>\n' +
+            '        </group>\n' +
+            '\n' +
+            '        <group >\n' +
+            '          <x-input title="公司报价：" name="companyValue" v-model="companyValue"></x-input>\n' +
+            '        </group></div>',
             onShow () {
               console.log('plugin show')
             },
@@ -167,25 +143,19 @@
             },
             //点击确定时，把数据录入，并且把输入框置空
             onConfirm () {
-              _this.inputObj[_this.companyName] = _this.companyValue;
-              _this.companyValue='';
-              _this.companyName='';
+              this.inputObj[this.companyName] = this.companyValue;
+              this.companyValue='';
+              this.companyName='';
             }
-
           })
 
-        },//end confirm
-        queryInput() {
-          this.show=true;
         }
-
       }
     }
 </script>
 
 <style lang="less" scoped>
   @import '~vux/src/styles/1px.less';
-  @import '~vux/src/styles/close';
 
   .flex-demo {
     text-align: center;
@@ -193,13 +163,5 @@
     background-color: #fffffb;
     border-radius: 4px;
     background-clip: padding-box;
-  }
-  .img-box {
-    height: 350px;
-    overflow: hidden;
-  }
-  .vux-close {
-    margin-top: 8px;
-    margin-bottom: 8px;
   }
 </style>
