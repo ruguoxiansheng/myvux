@@ -5,7 +5,7 @@
     <div id="register" v-show="registerShow" >
 
     <group :title="phoneNumber">
-     <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone"></x-input>
+     <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone" @on-blur="isRegister"></x-input>
     </group>
 
     <group>
@@ -50,7 +50,7 @@
   </button-tab>
 
     <div v-transfer-dom>
-      <alert v-model="errorShow" title="错误" @on-show="onShow" @on-hide="onHide">验证码获取失败，请重新获取！</alert>
+      <alert v-model="errorShow" title="提示" @on-show="onShow" @on-hide="onHide" :content="alertMsg"></alert>
     </div>
 
   </div>
@@ -74,21 +74,34 @@
       Alert
     },
     methods: {
+      // 注册与登陆切换
       register () {
-        /*console.log('click demo01');*/
         if (!this.registerShow) {
           this.registerShow=!this.registerShow;
           this.loginShow = !this.loginShow
         }
 
       }, //end register
-      login () {
-        if (!this.loginShow) {
-          this.registerShow=!this.registerShow;
-          this.loginShow = !this.loginShow
-        }
-      },//end login
-      registerButton(val) {
+      isRegister() {
+        const _this=this;
+         let url= 'http://127.0.0.1:8077/vue/isRegister';
+        let params = {
+          phone:this.phone
+        };
+        this.$http.post(url,params).then(function (response) {
+          if (response.data.data == false) {
+           // 没有注册过，不显示
+
+          } else{
+            _this.alertMsg=response.data.msg;
+            _this.errorShow=true;
+          }
+        }).catch(function (error) {
+          _this.alertMsg='系统错误！';
+          _this.errorShow=true;
+        });
+      },//end isRegister
+     registerButton(val) {
         const _this = this;
         let url= 'http://127.0.0.1:8077/vue/invalidCode';
         let params = {
@@ -98,18 +111,20 @@
         };
         this.$http.post(url,params).then(function (response) {
           if (response.status === 200 && response.data.status === '1') {
-            //axions 中如果用this 就会undefined
-            _this.data1=response.data.pageData;
-            _this.dataCount=response.data.totalSize;
+            _this.alertMsg='注册成功，请登陆！';
+            _this.errorShow=true;
+
           } else if(response.status === 200 ) {
+            _this.alertMsg=response.data.msg;
             _this.errorShow=true;
           } else{
+            _this.alertMsg='系统错误！';
             _this.errorShow=true;
           }
         }).catch(function (error) {
-
+          _this.alertMsg='系统错误！';
+          _this.errorShow=true;
         });
-        this.$router.push("/calCenter");
       },//end registerButton
       getInvalidCode(){
         const _this = this;
@@ -119,19 +134,25 @@
         };
         this.$http.post(url,params).then(function (response) {
           if (response.status === 200 && response.data.status === '1') {
-            //axions 中如果用this 就会undefined
-            _this.data1=response.data.pageData;
-            _this.dataCount=response.data.totalSize;
+
           } else if(response.status === 200 ) {
+            _this.alertMsg='验证码获取失败，请重新获取！';
             _this.errorShow=true;
           } else{
+            _this.alertMsg='验证码获取失败，请重新获取！';
             _this.errorShow=true;
           }
         }).catch(function (error) {
-
+          _this.alertMsg='系统错误！';
+          _this.errorShow=true;
           });
-
-      }
+      },//end getInvalidCode
+      login () {
+        if (!this.loginShow) {
+          this.registerShow=!this.registerShow;
+          this.loginShow = !this.loginShow
+        }
+      },//end login
 
     },
     data () {
@@ -143,7 +164,8 @@
         disable001: false,
         phoneNumber:'',
         phone:'',
-        errorShow:false
+        errorShow:false,
+        alertMsg:''
       }
     }
   }
