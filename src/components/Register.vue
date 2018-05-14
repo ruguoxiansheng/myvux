@@ -28,7 +28,7 @@
 
     <div id="login" v-show="loginShow">
       <group>
-       <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone"></x-input>
+       <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone" @on-blur="isLogin"></x-input>
       </group>
       <group>
         <x-input type="text" placeholder="输入密码" v-model="password" :min="6" :max="6"></x-input>
@@ -42,12 +42,10 @@
       <br>
 
     </div>
-
-
     <button-tab >
     <button-tab-item selected @on-item-click="register">注册</button-tab-item>
     <button-tab-item @on-item-click="login">登录</button-tab-item>
-  </button-tab>
+    </button-tab>
 
     <div v-transfer-dom>
       <alert v-model="errorShow" title="提示" @on-show="onShow" @on-hide="onHide" :content="alertMsg"></alert>
@@ -82,6 +80,12 @@
         }
 
       }, //end register
+      login () {
+        if (!this.loginShow) {
+          this.registerShow=!this.registerShow;
+          this.loginShow = !this.loginShow
+        }
+      },//end login
       isRegister() {
         const _this=this;
          let url= 'http://127.0.0.1:8077/vue/isRegister';
@@ -101,9 +105,28 @@
           _this.errorShow=true;
         });
       },//end isRegister
+      isLogin() {
+        const _this=this;
+        let url= 'http://127.0.0.1:8077/vue/isLogin';
+        let params = {
+          phone:this.phone
+        };
+        this.$http.post(url,params).then(function (response) {
+          if (response.data.data == false) {
+            // 没有注册过，不显示
+
+          } else{
+            _this.alertMsg=response.data.msg;
+            _this.errorShow=true;
+          }
+        }).catch(function (error) {
+          _this.alertMsg='系统错误！';
+          _this.errorShow=true;
+        });
+      },//end isLogin
      registerButton(val) {
         const _this = this;
-        let url= 'http://127.0.0.1:8077/vue/invalidCode';
+        let url= 'http://127.0.0.1:8077/vue/register';
         let params = {
           phone:this.phone,
           passWord:this.password,
@@ -133,13 +156,11 @@
           phone:this.phone
         };
         this.$http.post(url,params).then(function (response) {
-          if (response.status === 200 && response.data.status === '1') {
-
-          } else if(response.status === 200 ) {
-            _this.alertMsg='验证码获取失败，请重新获取！';
-            _this.errorShow=true;
-          } else{
-            _this.alertMsg='验证码获取失败，请重新获取！';
+          if (response.data.data.invalidCode != null) {
+            window.localStorage.setItem("invalidCode",response.data.data.invalidCode);
+            window.localStorage.setItem("codeValidTime", new Date().getTime());
+          }else{
+            _this.alertMsg=response.data.msg;
             _this.errorShow=true;
           }
         }).catch(function (error) {
@@ -147,12 +168,29 @@
           _this.errorShow=true;
           });
       },//end getInvalidCode
-      login () {
-        if (!this.loginShow) {
-          this.registerShow=!this.registerShow;
-          this.loginShow = !this.loginShow
-        }
-      },//end login
+      loginButton(val) {
+        const _this = this;
+        let url= 'http://127.0.0.1:8077/vue/login';
+        let params = {
+          phone:this.phone,
+          passWord:this.password
+        };
+        this.$http.post(url,params).then(function (response) {
+          if (response.data.status === '1') {
+            //登录成功之后，返回用户的id,权限，用户登录status
+            window.localStorage.setItem("userId",response.data.data.userId);
+            window.localStorage.setItem("property",response.data.data.property);
+            window.localStorage.setItem("userStatus",response.data.data.status);
+            _this.$router.push("/calCenter");
+          }else{
+            _this.alertMsg='系统错误！';
+            _this.errorShow=true;
+          }
+        }).catch(function (error) {
+          _this.alertMsg='系统错误！';
+          _this.errorShow=true;
+        });
+      }//end registerButton
 
     },
     data () {
