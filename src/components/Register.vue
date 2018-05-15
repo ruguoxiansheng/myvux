@@ -82,6 +82,9 @@
       }, //end register
       login () {
         if (!this.loginShow) {
+          this.phone='';
+          this.invalidCode='';
+          this.password='';
           this.registerShow=!this.registerShow;
           this.loginShow = !this.loginShow
         }
@@ -112,7 +115,7 @@
           phone:this.phone
         };
         this.$http.post(url,params).then(function (response) {
-          if (response.data.data == false) {
+          if (response.data.status == '1') {
             // 没有注册过，不显示
 
           } else{
@@ -183,7 +186,7 @@
             window.localStorage.setItem("userStatus",response.data.data.status);
             _this.$router.push("/calCenter");
           }else{
-            _this.alertMsg='系统错误！';
+            _this.alertMsg=response.data.msg;
             _this.errorShow=true;
           }
         }).catch(function (error) {
