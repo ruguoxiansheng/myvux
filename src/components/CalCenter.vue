@@ -177,6 +177,9 @@
         },//end confirm
         queryInput() {
           this.show=true;
+        },
+        calculate() {
+          
         }
 
       }

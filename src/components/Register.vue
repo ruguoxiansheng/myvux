@@ -115,12 +115,14 @@
           phone:this.phone
         };
         this.$http.post(url,params).then(function (response) {
-          if (response.data.status == '1') {
-            // 没有注册过，不显示
+          if (response.data.data == true) {
+            // 没有登陆过,就什么也不做
 
           } else{
+            //未登陆，不进行操作
             _this.alertMsg=response.data.msg;
             _this.errorShow=true;
+
           }
         }).catch(function (error) {
           _this.alertMsg='系统错误！';
@@ -181,9 +183,7 @@
         this.$http.post(url,params).then(function (response) {
           if (response.data.status === '1') {
             //登录成功之后，返回用户的id,权限，用户登录status
-            window.localStorage.setItem("userId",response.data.data.userId);
-            window.localStorage.setItem("property",response.data.data.property);
-            window.localStorage.setItem("userStatus",response.data.data.status);
+            window.localStorage.setItem("userId",response.data.data);
             _this.$router.push("/calCenter");
           }else{
             _this.alertMsg=response.data.msg;
