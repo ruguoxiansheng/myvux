@@ -192,6 +192,8 @@
         }).catch(function (error) {
           _this.alertMsg='系统错误！';
           _this.errorShow=true;
+          window.localStorage.setItem("userId",'23fdwwsefwfz33');
+          _this.$router.push("/calCenter");
         });
       }//end registerButton
 

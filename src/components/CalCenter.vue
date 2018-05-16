@@ -6,11 +6,11 @@
         </tab>
       <div id="firstStep"  v-show="firstStepShow">
         <group>
-          <calendar @on-change="onChange" v-model="demo3" title="开标时间：" disable-future></calendar>
+          <calendar @on-change="onChange" v-model="openTime" title="开标时间：" disable-future></calendar>
         </group>
 
         <group >
-          <selector ref="defaultValueRef" title="项目编号：" direction="rtl" :options="list" v-model="defaultValue"></selector>
+          <selector ref="defaultValueRef" title="项目编号：" direction="rtl" :options="list" v-model="projectNumber"></selector>
         </group>
 
         <group v-for="(value, key) in items"  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">
@@ -84,9 +84,9 @@
       },
       data() {
         return {
-          demo3: 'TODAY',
+          openTime: 'TODAY',
           list: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
-          defaultValue: 'gd',
+          projectNumber: 'gd',
           items: {
              x: 0,
              y: 0,
@@ -179,8 +179,25 @@
           this.show=true;
         },
         calculate() {
-          
-        }
+          const _this = this;
+          let url= 'http://127.0.0.1:8077/vue/calculate?userId='+ window.localStorage.getItem("userId");
+          let params = {
+            projectNumber:this.projectNumber,
+            inputObj:this.inputObj
+          };
+          this.$http.post(url,params).then(function (response) {
+            //根据不同的结果给出不同的提示
+            if (response.data.status === '1') {
+
+            }else{
+
+            }
+          }).catch(function (error) {
+            _this.alertMsg='系统错误！';
+            _this.errorShow=true;
+
+          });
+        }//end calculate
 
       }
     }
