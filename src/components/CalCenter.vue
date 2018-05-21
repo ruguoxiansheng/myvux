@@ -6,11 +6,18 @@
         </tab>
       <div id="firstStep"  v-show="firstStepShow">
         <group>
-          <calendar @on-change="onChange" v-model="openTime" title="开标时间：" disable-future></calendar>
+          <!--<calendar @on-change="openTimeChange" v-model="openTime" title="开标时间：" disable-future></calendar>-->
+          <datetime
+            v-model="openTime"
+            @on-change="openTimeChange"
+            title="开标时间："
+            @on-cancel="log('cancel')"
+            @on-confirm="onConfirm"
+            @on-hide="log('hide', $event)"></datetime>
         </group>
 
         <group >
-          <selector ref="defaultValueRef" title="项目编号：" direction="rtl" :options="list" v-model="projectNumber"></selector>
+          <selector  title="项目编号：" placeholder="请选择项目" direction="rtl" :options="projectList" v-model="projectNumber" @on-change="queryAlreadyCal"></selector>
         </group>
 
         <group v-for="(value, key) in items"  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">
@@ -28,7 +35,7 @@
         </group>
 
         <group >
-          <selector ref="defaultValueRef" title="单位：" direction="rtl" :options="unit" v-model="defaultUnitValue"></selector>
+          <selector ref="unitRef" title="单位：" direction="rtl"  readonly :options="unit" v-model="defaultUnitValue"></selector>
         </group>
         <br>
 
@@ -53,6 +60,10 @@
           </div>
 
       </div>
+
+      <div v-transfer-dom>
+        <alert v-model="errorShow" title="提示" @on-show="onShow" @on-hide="onHide" :content="alertMsg"></alert>
+      </div>
     </div>
 
 </template>
@@ -60,9 +71,9 @@
 <script>
   import {
     Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem,Calendar, Badge,Group,Selector,
-    Confirm ,TransferDomDirective as TransferDom,XDialog
+    Confirm ,TransferDomDirective as TransferDom,XDialog,Alert,Datetime
   } from 'vux'
-
+  import global_param from './Global.vue'//引用模块进来
     export default {
       directives: {
         TransferDom
@@ -80,17 +91,18 @@
         Group,
         Selector,
         Confirm,
-        XDialog
+        XDialog,
+        Alert,
+        Datetime
       },
       data() {
         return {
-          openTime: 'TODAY',
-          list: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
-          projectNumber: 'gd',
+          openTime: '',
+          projectList: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
+          projectNumber: '',
           items: {
-             x: 0,
-             y: 0,
-             z: 0
+             k: 0,
+             k2: 0
           },
           firstStepShow:true,
           secondStepShow:false,
@@ -180,10 +192,36 @@
         },
         calculate() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/vue/calculate?userId='+ window.localStorage.getItem("userId");
+          let url= 'http://127.0.0.1:8077/vue/calculate?consumerId='+ window.localStorage.getItem("consumerId");
+          let params = {
+            consumerId: window.localStorage.getItem("consumerId"),
+            projectNumber:this.projectNumber,
+            inputObj:this.inputObj,
+            k:this.k,
+            k2:this.k2
+          };
+          this.$http.post(url,params).then(function (response) {
+            //根据不同的结果给出不同的提示
+            if (response.data.status === '1') {
+              _this.alertMsg=response.data.msg;
+              _this.errorShow=true;
+            }else{
+              _this.alertMsg=response.data.msg;
+              _this.errorShow=true;
+            }
+          }).catch(function (error) {
+            _this.alertMsg='系统错误！';
+            _this.errorShow=true;
+
+          });
+        },//end calculate
+        // 查询当前的项目是否已经计算过了
+        queryAlreadyCal() {
+          const _this = this;
+          let url= 'http://127.0.0.1:8077/vue/alreadyCalTender?consumerId='+ window.localStorage.getItem("consumerId");
           let params = {
             projectNumber:this.projectNumber,
-            inputObj:this.inputObj
+            consumerId:window.localStorage.getItem("consumerId"),
           };
           this.$http.post(url,params).then(function (response) {
             //根据不同的结果给出不同的提示
@@ -191,14 +229,62 @@
 
             }else{
 
+              _this.alertMsg=response.data.msg;
+              _this.errorShow=true;
+
             }
           }).catch(function (error) {
             _this.alertMsg='系统错误！';
             _this.errorShow=true;
 
           });
-        }//end calculate
 
+        },//end of queryAlreadyCal
+        // 开标时间更改了
+        openTimeChange() {
+          const _this = this;
+          let url= 'http://127.0.0.1:8077/vue/queryProject?consumerId='+ window.localStorage.getItem("consumerId");
+          let params = {
+            openTime:this.openTime
+          };
+          this.$http.post(url,params).then(function (response) {
+            //根据不同的结果给出不同的提示
+            if (response.data.status === '1') {
+              _this.projectList = response.data.data;
+            }else{
+              _this.alertMsg=response.data.msg;
+              _this.errorShow=true;
+
+            }
+          }).catch(function (error) {
+            _this.alertMsg='系统错误！';
+            _this.errorShow=true;
+
+          });
+        }
+      },
+      // 页面启动的时候，有几个数据要初始化
+      created() {
+        const _this = this;
+        let url= 'http://127.0.0.1:8077/vue/queryProject?consumerId='+ window.localStorage.getItem("consumerId");
+        let params = {
+          openTime:this.openTime
+        };
+        this.$http.post(url,params).then(function (response) {
+          //根据不同的结果给出不同的提示
+          if (response.data.status === '1') {
+            _this.projectList = response.data.data;
+
+          }else{
+            _this.alertMsg=response.data.msg;
+            _this.errorShow=true;
+
+          }
+        }).catch(function (error) {
+          _this.alertMsg='系统错误！';
+          _this.errorShow=true;
+
+        });
       }
     }
 </script>
