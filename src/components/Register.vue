@@ -91,7 +91,7 @@
       },//end login
       isRegister() {
         const _this=this;
-         let url= 'http://127.0.0.1:8077/vue/isRegister';
+         let url= 'http://127.0.0.1:8077/login/isRegister';
         let params = {
           phone:this.phone
         };
@@ -110,7 +110,7 @@
       },//end isRegister
       isLogin() {
         const _this=this;
-        let url= 'http://127.0.0.1:8077/vue/isLogin';
+        let url= 'http://127.0.0.1:8077/login/isLogin';
         let params = {
           phone:this.phone
         };
@@ -131,7 +131,7 @@
       },//end isLogin
      registerButton(val) {
         const _this = this;
-        let url= 'http://127.0.0.1:8077/vue/register';
+        let url= 'http://127.0.0.1:8077/login/register';
         let params = {
           phone:this.phone,
           passWord:this.password,
@@ -156,7 +156,7 @@
       },//end registerButton
       getInvalidCode(){
         const _this = this;
-        let url= 'http://127.0.0.1:8077/vue/invalidCode';
+        let url= 'http://127.0.0.1:8077/login/invalidCode';
         let params = {
           phone:this.phone
         };
@@ -175,7 +175,7 @@
       },//end getInvalidCode
       loginButton(val) {
         const _this = this;
-        let url= 'http://127.0.0.1:8077/vue/login';
+        let url= 'http://127.0.0.1:8077/login/login';
         let params = {
           phone:this.phone,
           passWord:this.password
@@ -183,7 +183,7 @@
         this.$http.post(url,params).then(function (response) {
           if (response.data.status === '1') {
             //登录成功之后，返回用户的id,权限，用户登录status
-            window.localStorage.setItem("consumerId",response.data.data);
+            window.localStorage.setItem("userId",response.data.data);
             _this.$router.push("/calCenter");
           }else{
             _this.alertMsg=response.data.msg;
@@ -192,7 +192,6 @@
         }).catch(function (error) {
           _this.alertMsg='系统错误！';
           _this.errorShow=true;
-          window.localStorage.setItem("userId",'23fdwwsefwfz33');
           _this.$router.push("/calCenter");
         });
       }//end registerButton
