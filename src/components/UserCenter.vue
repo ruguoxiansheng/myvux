@@ -20,7 +20,8 @@
             <flexbox-item v-for="column in columns1"><div class="flex-demo">{{column.title}}</div></flexbox-item>
           </flexbox>
           <flexbox v-for="(data,index) in data1">
-            <flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>
+            <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
+            <flexbox-item v-for="column in columns1" ><div  class="flex-demo">{{data[column.key]}}</div></flexbox-item>
           </flexbox>
 
         </div>
@@ -143,8 +144,8 @@
 
   .flex-demo {
     text-align: center;
-    color: #fff;
-    background-color: #20b907;
+    color: #191818;
+    background-color:#f4f9f4;
     border-radius: 4px;
     background-clip: padding-box;
   }
