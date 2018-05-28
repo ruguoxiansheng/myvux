@@ -17,32 +17,33 @@
         </tab>
         <div v-show="item1Show">
           <flexbox>
-            <flexbox-item v-for="item1 in columns1"><div class="flex-demo">{{item1.title}}</div></flexbox-item>
+            <flexbox-item v-for="item1 in columns1" style="border-bottom:1px solid #10adff;"><div class="flex-demo" >{{item1.title}}</div></flexbox-item>
           </flexbox>
           <flexbox v-for="(dataItem1,index) in data1">
             <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
-            <flexbox-item v-for="item1 in columns1" ><div  class="flex-demo">{{dataItem1[item1.key]}}</div></flexbox-item>
+            <flexbox-item v-for="item1 in columns1"  style="border-bottom:1px solid #10adff;"><div  class="flex-demo">{{dataItem1[item1.key]}}</div></flexbox-item>
           </flexbox>
         </div>
 
+
         <div  v-show="item2Show">
           <flexbox>
-            <flexbox-item v-for="item2 in columns2"><div class="flex-demo">{{item2.title}}</div></flexbox-item>
+            <flexbox-item v-for="item2 in columns2" style="border-bottom:1px solid #10adff;"><div class="flex-demo">{{item2.title}}</div></flexbox-item>
           </flexbox>
           <flexbox v-for="(data2,index) in data2">
             <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
-            <flexbox-item v-for="item2 in columns2" ><div  class="flex-demo">{{data2[item2.key]}}</div></flexbox-item>
+            <flexbox-item v-for="item2 in columns2" style="border-bottom:1px solid #10adff;" ><div  class="flex-demo">{{data2[item2.key]}}</div></flexbox-item>
           </flexbox>
         </div>
 
 
         <div v-show="item3Show">
           <flexbox>
-            <flexbox-item v-for="item3 in columns3"><div class="flex-demo">{{item3.title}}</div></flexbox-item>
+            <flexbox-item v-for="item3 in columns3" style="border-bottom:1px solid #10adff;"><div class="flex-demo">{{item3.title}}</div></flexbox-item>
           </flexbox>
           <flexbox v-for="(data3,index) in data3">
             <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
-            <flexbox-item v-for="item3 in columns3" ><div  class="flex-demo">{{data3[item3.key]}}</div></flexbox-item>
+            <flexbox-item v-for="item3 in columns3" style="border-bottom:1px solid #10adff;" ><div  class="flex-demo">{{data3[item3.key]}}</div></flexbox-item>
           </flexbox>
         </div>
         <!--<cell-box :border-intent="false" class="sub-item" is-link>已完成</cell-box>-->
@@ -167,11 +168,11 @@
           ],
           columns3: [
             {
-              title: '公司报价',
-              key: 'companyValue'
+              title: '公司名称',
+              key: 'companyName'
             },
             {
-              title: '公司名称',
+              title: '公司报价',
               key: 'companyValue'
             }
           ],
@@ -221,19 +222,19 @@
           ],
           data3: [
             {
-              companyValue: '合州建筑',
+              companyName: '合州建筑',
               companyValue: 123.45
             },
             {
-              companyValue: '鲁艺建筑',
+              companyName: '鲁艺建筑',
               companyValue: 123.45
             },
             {
-              companyValue: '恢弘建筑',
+              companyName: '恢弘建筑',
               companyValue: 123.45
             },
             {
-              companyValue: '商河建筑',
+              companyName: '商河建筑',
               companyValue: 123.45
             },
           ]
@@ -248,13 +249,13 @@
 
   .flex-demo {
     text-align: center;
-    color: #191818;
-    background-color:#f4f9f4;
+    color: #000000;
+    background-color: #fffffb;
     border-radius: 4px;
     background-clip: padding-box;
   }
   .sub-item {
-    color: #888;
+    color: #bfb429;
     font-size:10px;
     margin-left: 10px;
   }
