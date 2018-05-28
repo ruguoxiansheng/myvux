@@ -192,7 +192,7 @@
         },
         calculate() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/app/calculate?userId='+ window.localStorage.getItem("userId");
+          let url= 'http://127.0.0.1:8077/app/calculate?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
             projectNumber:this.projectNumber,
             inputObj:this.inputObj,
@@ -200,27 +200,6 @@
             k2:this.k2
           };
           this.$http.post(url,params).then(function (response) {
-
-            // 202未登陆
-            if (response.status === 202) {
-              _this.alertMsg='请登陆！';
-              _this.errorShow=true;
-            }
-            // 203未注册
-            if (response.status === 203) {
-              _this.alertMsg='请注册！';
-              _this.errorShow=true;
-            }
-            // 204用户已经登陆
-            if (response.status === 204) {
-              _this.alertMsg='当前用户已经登陆！';
-              _this.errorShow=true;
-            }
-            // 205系统异常
-            if (response.status === 205) {
-              _this.alertMsg='系统异常';
-              _this.errorShow=true;
-            }
 
             //根据不同的结果给出不同的提示
             if (response.data.status === '1') {
@@ -239,32 +218,12 @@
         // 查询当前的项目是否已经计算过了
         queryAlreadyCal() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/app/alreadyCalTender?userId='+ window.localStorage.getItem("userId");
+          let url= 'http://127.0.0.1:8077/app/alreadyCalTender?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
             projectNumber:this.projectNumber
           };
           this.$http.post(url,params).then(function (response) {
 
-            // 202未登陆
-            if (response.status === 202) {
-              _this.alertMsg='请登陆！';
-              _this.errorShow=true;
-            }
-            // 203未注册
-            if (response.status === 203) {
-              _this.alertMsg='请注册！';
-              _this.errorShow=true;
-            }
-            // 204用户已经登陆
-            if (response.status === 204) {
-              _this.alertMsg='当前用户已经登陆！';
-              _this.errorShow=true;
-            }
-            // 205系统异常
-            if (response.status === 205) {
-              _this.alertMsg='系统异常';
-              _this.errorShow=true;
-            }
             //根据不同的结果给出不同的提示
             if (response.data.status === '1') {
 
@@ -275,8 +234,9 @@
 
             }
           }).catch(function (error) {
-            _this.alertMsg='系统错误！';
-            _this.errorShow=true;
+
+              _this.alertMsg='系统错误！';
+              _this.errorShow=true;
 
           });
 
@@ -284,32 +244,11 @@
         // 开标时间更改了
         openTimeChange() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/app/queryProject?userId='+ window.localStorage.getItem("userId");
+          let url= 'http://127.0.0.1:8077/app/queryProject?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
             openTime:this.openTime
           };
           this.$http.post(url,params).then(function (response) {
-
-            // 202未登陆
-            if (response.status === 202) {
-              _this.alertMsg='请登陆！';
-              _this.errorShow=true;
-            }
-            // 203未注册
-            if (response.status === 203) {
-              _this.alertMsg='请注册！';
-              _this.errorShow=true;
-            }
-            // 204用户已经登陆
-            if (response.status === 204) {
-              _this.alertMsg='当前用户已经登陆！';
-              _this.errorShow=true;
-            }
-            // 205系统异常
-            if (response.status === 205) {
-              _this.alertMsg='系统异常';
-              _this.errorShow=true;
-            }
             //根据不同的结果给出不同的提示
             if (response.data.status === '1') {
               _this.projectList = response.data.data;
@@ -328,32 +267,11 @@
       // 页面启动的时候，有几个数据要初始化
       created() {
         const _this = this;
-        let url= 'http://127.0.0.1:8077/app/queryProject?userId='+ window.localStorage.getItem("userId");
+        let url= 'http://127.0.0.1:8077/app/queryProject?consumerId='+ window.sessionStorage.getItem("consumerId");
         let params = {
           openTime:this.openTime
         };
         this.$http.post(url,params).then(function (response) {
-
-          // 202未登陆
-          if (response.status === 202) {
-            _this.alertMsg='请登陆！';
-            _this.errorShow=true;
-          }
-          // 203未注册
-          if (response.status === 203) {
-            _this.alertMsg='请注册！';
-            _this.errorShow=true;
-          }
-          // 204用户已经登陆
-          if (response.status === 204) {
-            _this.alertMsg='当前用户已经登陆！';
-            _this.errorShow=true;
-          }
-          // 205系统异常
-          if (response.status === 205) {
-            _this.alertMsg='系统异常';
-            _this.errorShow=true;
-          }
           //根据不同的结果给出不同的提示
           if (response.data.status === '1') {
             _this.projectList = response.data.data;

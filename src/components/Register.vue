@@ -183,7 +183,7 @@
         this.$http.post(url,params).then(function (response) {
           if (response.data.status === '1') {
             //登录成功之后，返回用户的id,权限，用户登录status
-            window.localStorage.setItem("userId",response.data.data);
+            window.sessionStorage.setItem("consumerId",response.data.data);
             _this.$router.push("/calCenter");
           }else{
             _this.alertMsg=response.data.msg;
