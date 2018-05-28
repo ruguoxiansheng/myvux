@@ -84,7 +84,7 @@
         },//end of queryAlreadyCal
       },//end methods
     created() {
-      queryPersonCalProject();
+      this.queryPersonCalProject();
     },//end of created
       data () {
         return {

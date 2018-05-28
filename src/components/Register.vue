@@ -5,15 +5,15 @@
     <div id="register" v-show="registerShow" >
 
     <group :title="phoneNumber">
-     <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone" @on-blur="isRegister"></x-input>
+     <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone" @on-blur="isRegister" required="true"></x-input>
     </group>
 
     <group>
-       <x-input type="text" placeholder="设置密码" v-model="password" :min="6" :max="6"></x-input>
+       <x-input type="password" placeholder="设置密码" v-model="password" :min="6" :max="6" required="true" ></x-input>
     </group>
     <group>
     <flexbox>
-      <flexbox-item> <x-input name="identifyCode" placeholder="请输入验证码" keyboard="number" is-type="china-mobile" v-model="invalidCode"></x-input></flexbox-item>
+      <flexbox-item> <x-input name="identifyCode" placeholder="请输入验证码" keyboard="number" :min="6" :max="6" v-model="invalidCode" required="true"></x-input></flexbox-item>
       <flexbox-item> <x-button mini @click.native="getInvalidCode">获取验证码</x-button > </flexbox-item>
     </flexbox>
     </group>
@@ -28,10 +28,10 @@
 
     <div id="login" v-show="loginShow">
       <group>
-       <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone" @on-blur="isLogin"></x-input>
+       <x-input name="mobile" placeholder="请输入手机号码" keyboard="number" is-type="china-mobile" v-model="phone" @on-blur="isLogin" required="true"></x-input>
       </group>
       <group>
-        <x-input type="text" placeholder="输入密码" v-model="password" :min="6" :max="6"></x-input>
+        <x-input type="password" placeholder="输入密码" v-model="password" :min="6" :max="6" required="true"></x-input>
       </group>
       <br>
       <flexbox>
