@@ -9,19 +9,43 @@
         @click.native="showBillTitle = !showBillTitle"></cell>
 
       <template v-if="showBillTitle">
-        <selector  title="项目编号：" placeholder="请选择项目" direction="rtl" :options="projectList" v-model="projectNumber" @on-change="queryPersonCalProject"></selector>
+        <selector  title="项目编号：" placeholder="请选择项目" direction="rtl" :options="projectList" v-model="projectNumber" @on-change="projectChange"></selector>
         <tab>
-          <tab-item selected @on-item-click="onItemClick">应中标价格</tab-item>
-          <tab-item @on-item-click="onItemClick">前五名公司</tab-item>
+          <tab-item selected @on-item-click="onItemClick">提交记录</tab-item>
+          <tab-item @on-item-click="onItemClick">应中标价格</tab-item>
           <tab-item @on-item-click="onItemClick">提交记录</tab-item>
         </tab>
-        <div>
+        <div v-show="items0Show">
+
           <flexbox>
-            <flexbox-item v-for="column in columns1"><div class="flex-demo">{{column.title}}</div></flexbox-item>
+            <flexbox-item v-for="column in comitHistoryTitle"><div class="flex-demo">{{column.title}}</div></flexbox-item>
           </flexbox>
-          <flexbox v-for="(data,index) in data1">
+          <div style="overflow: auto">
+          <flexbox v-for="(data,index) in comitHistoryData">
             <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
-            <flexbox-item v-for="column in columns1" ><div  class="flex-demo">{{data[column.key]}}</div></flexbox-item>
+            <flexbox-item v-for="column in comitHistoryTitle" ><div  class="flex-demo">{{data[column.key]}}</div></flexbox-item>
+          </flexbox>
+          </div>
+        </div>
+
+        <div  v-show="items1Show">
+          <flexbox>
+            <flexbox-item v-for="column in shouldQuotePriceTitle"><div class="flex-demo">{{column.title}}</div></flexbox-item>
+          </flexbox>
+          <flexbox v-for="(data,index) in shouldQuotePriceData">
+            <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
+            <flexbox-item v-for="column in shouldQuotePriceTitle" ><div  class="flex-demo">{{data[column.key]}}</div></flexbox-item>
+          </flexbox>
+
+        </div>
+
+        <div v-show="items2Show">
+          <flexbox>
+            <flexbox-item v-for="column in proQuotePriceTitle"><div class="flex-demo">{{column.title}}</div></flexbox-item>
+          </flexbox>
+          <flexbox v-for="(data,index) in proQuotePriceData">
+            <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
+            <flexbox-item v-for="column in proQuotePriceTitle" ><div  class="flex-demo">{{data[column.key]}}</div></flexbox-item>
           </flexbox>
 
         </div>
@@ -69,10 +93,8 @@
             if (response.data.status === '1') {
                _this.projectList = response.data.data;
             }else{
-
               _this.alertMsg=response.data.msg;
               _this.errorShow=true;
-
             }
           }).catch(function (error) {
 
@@ -82,9 +104,51 @@
           });
 
         },//end of queryAlreadyCal
+        projectChange() {
+          const _this = this;
+          let url= 'http://127.0.0.1:8077/app/queryDetail?consumerId=00fb09f70ac84e3f9590f95c5b685cbc';
+          let params = {
+            consumerId:'00fb09f70ac84e3f9590f95c5b685cbc',
+            projectNumber:this.projectNumber==undefined?undefined:this.projectNumber
+          }
+          this.$http.post(url,params).then(function (response) {
+
+            //根据不同的结果给出不同的提示
+            if (response.data.status === '1') {
+              _this.comitHistoryData = response.data.data.comitHistory;
+              _this.shouldQuotePriceData = response.data.data.shouldQuotePrice;
+              _this.proQuotePriceData = response.data.data.proQuotePrice;
+
+            }else{
+              _this.alertMsg=response.data.msg;
+              _this.errorShow=true;
+            }
+          }).catch(function (error) {
+
+            _this.alertMsg='系统错误！';
+            _this.errorShow=true;
+
+          });
+
+        },//end of projectChange
+        onItemClick(index) {
+          if(index ===0) {
+            this.items0Show=true;
+              this.items1Show=false;
+              this.items2Show=false;
+          }else if(index ===1){
+            this.items0Show=false;
+            this.items1Show=true;
+            this.items2Show=false;
+          }else if(index ===2){
+            this.items0Show=false;
+            this.items1Show=false;
+            this.items2Show=true;
+          }
+        }
       },//end methods
     created() {
-      queryPersonCalProject();
+      this.queryPersonCalProject();
     },//end of created
       data () {
         return {
@@ -96,43 +160,43 @@
           money:120,
           consumerHistory:'消费历史',
           showContent001: false,
-          projectList: [{key: 'gd', value: '广东'}, {key: 'gx', value: '广西'}],
-          columns1: [
+          items0Show:true,
+          items1Show:false,
+          items2Show:false,
+          projectList: [],
+          comitHistoryTitle: [
             {
-              title: 'Name',
-              key: 'name'
+              title: '公司名称',
+              key: 'companyName'
             },
             {
-              title: 'Age',
-              key: 'age'
-            },
-            {
-              title: 'Address',
-              key: 'address'
+              title: '公司报价',
+              key: 'companyValue'
             }
           ],
-          data1: [
+          comitHistoryData: [],
+          shouldQuotePriceTitle: [
             {
-              name: 'John Brown',
-              age: 18,
-              address: 'New York No. 1 Lake Park'
+              title: '项目编号',
+              key: 'projectNumber'
             },
             {
-              name: 'Jim Green',
-              age: 24,
-              address: 'London No. 1 Lake Park'
-            },
-            {
-              name: 'Joe Black',
-              age: 30,
-              address: 'Sydney No. 1 Lake Park'
-            },
-            {
-              name: 'Jon Snow',
-              age: 26,
-              address: 'Ottawa No. 2 Lake Park'
+              title: '应中标价格',
+              key: 'shouldPrice'
             }
-          ]
+          ],
+          shouldQuotePriceData: [],
+          proQuotePriceTitle: [
+            {
+              title: '公司名称',
+              key: 'companyName'
+            },
+            {
+              title: '公司报价',
+              key: 'companyValue'
+            }
+          ],
+          proQuotePriceData: []
         }
       }//end of data
     }
