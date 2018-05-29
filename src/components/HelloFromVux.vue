@@ -1,10 +1,10 @@
 <template>
   <div>
     <x-header left-options.showBack :title="headTitle"></x-header>
-    <div>
+    <div >
     <router-view></router-view>
     </div>
-    <tabbar>
+    <tabbar >
       <tabbar-item  @on-item-click="toUserCenter">
         <span slot="label" >用户中心</span>
       </tabbar-item>
@@ -51,5 +51,9 @@ export default {
 </script>
 
 <style>
-
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
 </style>
