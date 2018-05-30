@@ -20,12 +20,12 @@
           <flexbox>
             <flexbox-item v-for="column in comitHistoryTitle"><div class="flex-demo">{{column.title}}</div></flexbox-item>
           </flexbox>
-          <div style="overflow: auto">
+
           <flexbox v-for="(data,index) in comitHistoryData">
             <!--<flexbox-item v-for="(value,key) in data" ><div  class="flex-demo">{{value}}</div></flexbox-item>-->
             <flexbox-item v-for="column in comitHistoryTitle" ><div  class="flex-demo">{{data[column.key]}}</div></flexbox-item>
           </flexbox>
-          </div>
+
         </div>
 
         <div  v-show="items1Show">
@@ -83,9 +83,9 @@
         },
         queryPersonCalProject() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/app/queryPersonCalProject?consumerId=00fb09f70ac84e3f9590f95c5b685cbc';
+          let url= 'http://127.0.0.1:8077/app/queryPersonCalProject?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
-            consumerId:'00fb09f70ac84e3f9590f95c5b685cbc'
+            consumerId: window.sessionStorage.getItem("consumerId")
           }
           this.$http.post(url,params).then(function (response) {
 
@@ -106,9 +106,9 @@
         },//end of queryAlreadyCal
         projectChange() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/app/queryDetail?consumerId=00fb09f70ac84e3f9590f95c5b685cbc';
+          let url= 'http://127.0.0.1:8077/app/queryDetail?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
-            consumerId:'00fb09f70ac84e3f9590f95c5b685cbc',
+            consumerId: window.sessionStorage.getItem("consumerId"),
             projectNumber:this.projectNumber==undefined?undefined:this.projectNumber
           }
           this.$http.post(url,params).then(function (response) {

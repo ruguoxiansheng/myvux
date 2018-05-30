@@ -192,7 +192,7 @@
         },
         calculate() {
           const _this = this;
-          let url= 'http://127.0.0.1:8077/app/calculate?consumerId='+ window.sessionStorage.getItem("consumerId");
+          let url= 'http://127.0.0.1:8077/app/calculateTender?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
             projectNumber:this.projectNumber,
             inputObj:this.inputObj,
@@ -220,6 +220,7 @@
           const _this = this;
           let url= 'http://127.0.0.1:8077/app/alreadyCalTender?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
+            consumerId: window.sessionStorage.getItem("consumerId"),
             projectNumber:this.projectNumber
           };
           this.$http.post(url,params).then(function (response) {
