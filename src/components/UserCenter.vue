@@ -13,7 +13,7 @@
         <tab>
           <tab-item selected @on-item-click="onItemClick">提交记录</tab-item>
           <tab-item @on-item-click="onItemClick">应中标价格</tab-item>
-          <tab-item @on-item-click="onItemClick">提交记录</tab-item>
+          <tab-item @on-item-click="onItemClick">前五名价格</tab-item>
         </tab>
         <div v-show="items0Show">
 

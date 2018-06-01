@@ -20,8 +20,13 @@
           <selector  title="项目编号：" placeholder="请选择项目" direction="rtl" :options="projectList" v-model="projectNumber" @on-change="queryAlreadyCal"></selector>
         </group>
 
-        <group v-for="(value, key) in items"  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">
-         <x-input :title="key" :value="value" ></x-input>
+        <!--<group v-for="(value, key) in items"  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">-->
+         <!--<x-input :title="key" :value="value" ></x-input>-->
+        <!--</group>-->
+
+        <group  label-width="4.5em" label-margin-right="5.5em" label-align="right" gutter="4px">
+          <x-input title="k" v-model="k" ></x-input>
+          <x-input title="k2" v-model="k2" ></x-input>
         </group>
 
       </div>
@@ -31,7 +36,7 @@
         </group>
 
         <group >
-          <x-input title="公司报价：" name="companyValue" v-model="companyValue"></x-input>
+          <x-input title="公司报价：" type="number" keyboard="number" name="companyValue" v-model="companyValue"></x-input>
         </group>
 
         <group >
@@ -104,10 +109,13 @@
              k: 0,
              k2: 0
           },
+          k:0,
+          k2:0,
           firstStepShow:true,
           secondStepShow:false,
           companyName:'',
           companyValue:'',
+          comitData:[],
           unit: [
             {
               key: 'yuan',
@@ -180,6 +188,8 @@
             //点击确定时，把数据录入，并且把输入框置空
             onConfirm () {
               _this.inputObj[_this.companyName] = _this.companyValue;
+              var ordN={"companyName":_this.companyName,"companyValue" :_this.companyValue};
+              _this.comitData.push(ordN);
               _this.companyValue='';
               _this.companyName='';
             }
@@ -194,8 +204,9 @@
           const _this = this;
           let url= 'http://127.0.0.1:8077/app/calculateTender?consumerId='+ window.sessionStorage.getItem("consumerId");
           let params = {
+            consumerId:window.sessionStorage.getItem("consumerId"),
             projectNumber:this.projectNumber,
-            inputObj:this.inputObj,
+            comitData:this.comitData,
             k:this.k,
             k2:this.k2
           };

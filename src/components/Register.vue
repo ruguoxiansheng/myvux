@@ -43,8 +43,8 @@
 
     </div>
     <button-tab >
-    <button-tab-item selected @on-item-click="register">注册</button-tab-item>
-    <button-tab-item @on-item-click="login">登录</button-tab-item>
+    <button-tab-item id="reg" ref="mybox" selected @on-item-click="register">注册</button-tab-item>
+    <button-tab-item  @on-item-click="login">登录</button-tab-item>
     </button-tab>
 
     <div v-transfer-dom>
@@ -93,7 +93,7 @@
         const _this=this;
          let url= 'http://127.0.0.1:8077/login/isRegister';
         let params = {
-          phone:this.phone
+          phone:this.phone==='' ? '1321':this.phone
         };
         this.$http.post(url,params).then(function (response) {
           if (response.data.data == false) {
@@ -196,7 +196,7 @@
         });
       }//end registerButton
 
-    },
+    },//end of methods
     data () {
       return {
         registerShow: true,
